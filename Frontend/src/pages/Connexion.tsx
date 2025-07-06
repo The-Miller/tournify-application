@@ -1,15 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// /* eslint-disable react/react-in-jsx-scope */
+ /* eslint-disable react/react-in-jsx-scope */
 
 "use client"
 
-import type React from "react"
-import { useForm } from "react-hook-form"
-import { useNavigate, Link } from "react-router-dom"
+import type React from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
+import { login } from "../api/api";
+import { AxiosError } from "axios";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 interface LoginForm {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 const Connexion: React.FC = () => {
@@ -17,30 +22,50 @@ const Connexion: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginForm>()
-  const navigate = useNavigate()
+  } = useForm<LoginForm>();
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = async (data: LoginForm) => {
     try {
-      console.log("Connexion réussie :", data)
-      // Redirect logic here
-    } catch (error) {
-      console.error("Erreur de connexion :", error)
+      const response = await login(data.email, data.password);
+      console.log("Réponse de l'API :", response); // Ajouter ce log
+      setErrorMessage(null);
+      const userRole = response.user?.role || "USER";
+      console.log("Rôle détecté :", userRole); // Ajouter ce log
+      if (userRole === "ADMINISTRATEUR") {
+        navigate("/dashboard-superadmin");
+      } else if (userRole === "GERANT") {
+        navigate("/dashboard-admin");
+      } else if (userRole === "COMMUNITY_MANAGER") {
+        navigate("/dashboard-community");
+      } else {
+        navigate("/");
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        setErrorMessage(
+          error.response?.data?.message ||
+            "Erreur de connexion, veuillez vérifier vos identifiants ou la connexion au serveur"
+        );
+      } else if (error instanceof Error) {
+        setErrorMessage(error.message || "Une erreur réseau s'est produite, veuillez réessayer");
+      } else {
+        setErrorMessage("Une erreur inconnue s'est produite, veuillez réessayer");
+      }
     }
-  }
+  };
 
   return (
-    // <div className="min-h-screen bg-gradient-to-br from-[#6BA7E2] via-[#5a96d1] to-[#1b3971] flex items-center justify-center p-4 relative overflow-hidden">
-    <div className="min-h-screen bg-white-to-br from-[#6BA7E2] via-[#5a96d1] to-[#1b3971] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Pattern */}
+    <div>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-br from-[#6BA7E2] via-[#5a96d1] to-[#1b3971] flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent transform -skew-y-12"></div>
         <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white to-transparent transform skew-y-12"></div>
       </div>
-
       <div className="w-full max-w-md relative z-10">
         <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20">
-          {/* Header */}
           <div className="text-center pb-8 pt-8 px-8 bg-gradient-to-br from-white to-gray-50">
             <div className="mx-auto w-16 h-16 bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] rounded-2xl flex items-center justify-center mb-4 shadow-lg">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,8 +82,21 @@ const Connexion: React.FC = () => {
             </h2>
             <p className="text-gray-600 mt-2">Connectez-vous à votre compte</p>
           </div>
-
           <div className="px-8 pb-8 space-y-6">
+            {errorMessage && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-sm text-red-600 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {errorMessage}
+                </p>
+              </div>
+            )}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium text-gray-700 flex items-center">
@@ -100,7 +138,6 @@ const Connexion: React.FC = () => {
                   </div>
                 )}
               </div>
-
               <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-medium text-gray-700 flex items-center">
                   <svg className="w-4 h-4 mr-2 text-[#6BA7E2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,7 +172,6 @@ const Connexion: React.FC = () => {
                   </div>
                 )}
               </div>
-
               <button
                 type="submit"
                 className="w-full h-12 bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] hover:from-[#5a96d1] hover:to-[#2d4a7a] text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] flex items-center justify-center shadow-lg hover:shadow-xl"
@@ -151,7 +187,6 @@ const Connexion: React.FC = () => {
                 Se connecter
               </button>
             </form>
-
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300" />
@@ -160,7 +195,6 @@ const Connexion: React.FC = () => {
                 <span className="px-2 bg-white text-gray-500">ou</span>
               </div>
             </div>
-
             <Link
               to="/inscription"
               className="w-full h-12 border-2 border-[#6BA7E2]/30 hover:border-[#6BA7E2] hover:bg-[#6BA7E2]/5 transition-all duration-200 bg-transparent rounded-xl flex items-center justify-center text-[#6BA7E2] font-medium"
@@ -178,8 +212,11 @@ const Connexion: React.FC = () => {
           </div>
         </div>
       </div>
+      </div>
+      <Footer />
     </div>
-  )
-}
+   
+  );
+};
 
-export default Connexion
+export default Connexion;

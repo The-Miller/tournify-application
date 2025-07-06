@@ -7,6 +7,6 @@ package com.gestionTSIU.gestiontournois.model;
 // }
 public enum Role {
 
-    USER, ADMIN, MANAGER ,GERANT 
+    UTILISATEUR, ADMINISTRATEUR, COMMUNITY_MANAGER ,GERANT 
 
 }

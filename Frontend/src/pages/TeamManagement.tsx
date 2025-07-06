@@ -1,441 +1,606 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { useNavigate } from "react-router-dom"
+// import {
+//   getAllEquipes,
+//   getTeamMembers,
+//   deleteEquipe,
+//   deleteTeamMember,
+//   addMemberToTeam,
+// } from "../api/api"
+// import Sidebar from "../components/Sidebar"
+
+// const TeamManagement: React.FC = () => {
+//   const [teams, setTeams] = useState<any[]>([])
+//   const [selectedTeam, setSelectedTeam] = useState<number | null>(null)
+//   const [members, setMembers] = useState<any[]>([])
+//   const [newMember, setNewMember] = useState({ nom: "", prenom: "" }) // État pour le nouveau membre
+//   const navigate = useNavigate()
+
+//   useEffect(() => {
+//     loadTeams()
+//   }, [])
+
+//   const loadTeams = async () => {
+//     try {
+//       const data = await getAllEquipes()
+//       const updatedTeams = data.map((team: any) => ({
+//         ...team,
+//         tournoiNom: team.tournoi && typeof team.tournoi === "object" ? team.tournoi.nom : "N/A",
+//       }))
+//       setTeams(updatedTeams)
+//     } catch (error: any) {
+//       console.error("Erreur lors du chargement des équipes:", error)
+//     }
+//   }
+
+//   const loadMembers = async (teamId: number) => {
+//     setSelectedTeam(teamId)
+//     try {
+//       const data = await getTeamMembers(teamId)
+//       setMembers(data)
+//     } catch (error: any) {
+//       console.error("Erreur lors du chargement des membres:", error)
+//     }
+//   }
+
+//   const deleteTeam = async (teamId: number) => {
+//     if (window.confirm("Êtes-vous sûr de vouloir supprimer cette équipe ?")) {
+//       try {
+//         await deleteEquipe(teamId)
+//         setTeams(teams.filter((team) => team.id !== teamId))
+//         if (selectedTeam === teamId) {
+//           setSelectedTeam(null)
+//           setMembers([])
+//           setNewMember({ nom: "", prenom: "" }) // Réinitialiser le formulaire
+//         }
+//       } catch (error: any) {
+//         console.error("Erreur lors de la suppression de l'équipe:", error)
+//       }
+//     }
+//   }
+
+//   const deleteMember = async (memberId: number) => {
+//     if (selectedTeam && window.confirm("Êtes-vous sûr de vouloir supprimer ce membre ?")) {
+//       try {
+//         await deleteTeamMember(selectedTeam, memberId)
+//         setMembers(members.filter((m) => m.id !== memberId))
+//       } catch (error: any) {
+//         console.error("Erreur lors de la suppression du membre:", error)
+//       }
+//     }
+//   }
+
+//   const addMember = async () => {
+//     if (selectedTeam && newMember.nom && newMember.prenom) {
+//       const memberData = { ...newMember, equipeId: selectedTeam }
+//       try {
+//         const response = await addMemberToTeam(selectedTeam, memberData)
+//         setMembers([...members, response])
+//         setNewMember({ nom: "", prenom: "" }) // Réinitialiser les champs après ajout
+//       } catch (error: any) {
+//         console.error("Erreur lors de l'ajout du membre:", error)
+//       }
+//     } else {
+//       alert("Veuillez remplir tous les champs.")
+//     }
+//   }
+
+//   return (
+//     <div className="flex min-h-screen bg-gradient-to-br from-[#6BA7E2]/5 via-white to-[#1b3971]/5">
+//       <Sidebar />
+//       <main className="flex-1 ml-64 p-8">
+//         <div className="space-y-8">
+//           {/* Header */}
+//           <div className="text-center">
+//             <h1 className="text-4xl font-bold bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] bg-clip-text text-transparent mb-4">
+//               Gestion des Équipes
+//             </h1>
+//           </div>
+
+//           {/* Teams Table */}
+//           <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+//             <div className="bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] text-white p-6">
+//               <h2 className="text-xl font-bold">Liste des Équipes</h2>
+//             </div>
+
+//             <div className="overflow-x-auto">
+//               <table className="w-full">
+//                 <thead className="bg-gray-50">
+//                   <tr>
+//                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Id</th>
+//                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nom de l'Équipe</th>
+//                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Catégorie</th>
+//                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Tournoi</th>
+//                     <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Membres</th>
+//                     <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Action</th>
+//                   </tr>
+//                 </thead>
+//                 <tbody className="divide-y divide-gray-200">
+//                   {teams.map((team) => (
+//                     <tr key={team.id} className="hover:bg-gray-50 transition-colors">
+//                       <td className="px-6 py-4 text-sm font-medium text-gray-900">{team.id}</td>
+//                       <td className="px-6 py-4 text-sm text-gray-900">{team.nom}</td>
+//                       <td className="px-6 py-4">
+//                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#6BA7E2]/10 text-[#6BA7E2]">
+//                           {team.categorie}
+//                         </span>
+//                       </td>
+//                       <td className="px-6 py-4 text-sm text-gray-900">{team.tournoiNom}</td>
+//                       <td className="px-6 py-4 text-center">
+//                         <button
+//                           className="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm font-medium transition-colors"
+//                           onClick={() => loadMembers(team.id)}
+//                         >
+//                           Consulter
+//                         </button>
+//                       </td>
+//                       <td className="px-6 py-4">
+//                         <div className="flex items-center justify-center space-x-2">
+//                           <button
+//                             className="bg-[#6BA7E2] hover:bg-[#5a96d1] text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors"
+//                             onClick={() => navigate(`/teams/edit/${team.id}`)}
+//                           >
+//                             Modifier
+//                           </button>
+//                           <button
+//                             className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors"
+//                             onClick={() => deleteTeam(team.id)}
+//                           >
+//                             Supprimer
+//                           </button>
+//                         </div>
+//                       </td>
+//                     </tr>
+//                   ))}
+//                 </tbody>
+//               </table>
+//             </div>
+
+//             <div className="p-6 bg-gray-50 border-t">
+//               <button
+//                 className="bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] hover:from-[#5a96d1] hover:to-[#2d4a7a] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
+//                 onClick={() => navigate("/teams/create")}
+//               >
+//                 Ajouter une nouvelle Équipe
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* Members Section */}
+//           {selectedTeam && (
+//             <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+//               <div className="bg-gradient-to-r from-[#1b3971] to-[#6BA7E2] text-white p-6">
+//                 <h3 className="text-xl font-bold">Membres de l'Équipe</h3>
+//               </div>
+
+//               <div className="p-6">
+//                 <div className="overflow-x-auto mb-6">
+//                   <table className="w-full">
+//                     <thead className="bg-gray-50">
+//                       <tr>
+//                         <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Id</th>
+//                         <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Nom</th>
+//                         <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Prénom</th>
+//                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">Action</th>
+//                       </tr>
+//                     </thead>
+//                     <tbody className="divide-y divide-gray-200">
+//                       {members.map((member) => (
+//                         <tr key={member.id} className="hover:bg-gray-50">
+//                           <td className="px-4 py-3 text-sm font-medium text-gray-900">{member.id}</td>
+//                           <td className="px-4 py-3 text-sm text-gray-900">{member.nom}</td>
+//                           <td className="px-4 py-3 text-sm text-gray-900">{member.prenom}</td>
+//                           <td className="px-4 py-3">
+//                             <div className="flex items-center justify-center space-x-2">
+//                               <button
+//                                 className="bg-[#6BA7E2] hover:bg-[#5a96d1] text-white px-3 py-1 rounded-lg text-sm transition-colors"
+//                                 disabled
+//                               >
+//                                 Modifier
+//                               </button>
+//                               <button
+//                                 className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+//                                 onClick={() => deleteMember(member.id)}
+//                               >
+//                                 Supprimer
+//                               </button>
+//                             </div>
+//                           </td>
+//                         </tr>
+//                       ))}
+//                     </tbody>
+//                   </table>
+//                 </div>
+
+//                 <div className="bg-gray-50 rounded-xl p-6">
+//                   <h4 className="text-lg font-semibold text-gray-900 mb-4">Ajouter un Nouveau Membre</h4>
+//                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//                     <div>
+//                       <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
+//                       <input
+//                         type="text"
+//                         value={newMember.nom}
+//                         onChange={(e) => setNewMember({ ...newMember, nom: e.target.value })}
+//                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6BA7E2] focus:border-transparent"
+//                         required
+//                       />
+//                     </div>
+//                     <div>
+//                       <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
+//                       <input
+//                         type="text"
+//                         value={newMember.prenom}
+//                         onChange={(e) => setNewMember({ ...newMember, prenom: e.target.value })}
+//                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6BA7E2] focus:border-transparent"
+//                         required
+//                       />
+//                     </div>
+//                   </div>
+//                   <button
+//                     className="mt-4 bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] text-white px-6 py-2 rounded-lg font-medium hover:from-[#5a96d1] hover:to-[#2d4a7a] transition-all"
+//                     onClick={addMember}
+//                   >
+//                     Ajouter Membre
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
+//           )}
+//         </div>
+//       </main>
+//     </div>
+//   )
+// }
+
+// export default TeamManagement
+
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+"use client"
+
+import type React from "react"
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import {
+  getAllEquipes,
+  getTeamMembers,
+  deleteEquipe,
+  deleteTeamMember,
+  addMemberToTeam,
+  updateTeamMember,
+} from "../api/api"
+import Sidebar from "../components/Sidebar"
 
 const TeamManagement: React.FC = () => {
-  const [teams, setTeams] = useState<any[]>([]);
-  const [selectedTeam, setSelectedTeam] = useState<any>(null);
-  const [members, setMembers] = useState<any[]>([]);
-  const [newMember, setNewMember] = useState({ nom: '', prenom: '', equipeId: null as number | null });
-  const [editingMember, setEditingMember] = useState<any>(null);
-  const navigate = useNavigate();
+  const [teams, setTeams] = useState<any[]>([])
+  const [selectedTeam, setSelectedTeam] = useState<number | null>(null)
+  const [members, setMembers] = useState<any[]>([])
+  const [newMember, setNewMember] = useState({ nom: "", prenom: "" }) // État pour le nouveau membre
+  const [editingMember, setEditingMember] = useState<any>(null) // État pour le membre en cours de modification
+  const [isEditing, setIsEditing] = useState(false) // État pour activer/désactiver le mode édition
+  const navigate = useNavigate()
 
   useEffect(() => {
-    loadTeams();
-  }, []);
+    loadTeams()
+  }, [])
 
-  const loadTeams = () => {
-    axios.get('http://localhost:8080/api/teams')
-      .then((response) => {
-        const updatedTeams = response.data.map((team: any) => ({
-          ...team,
-          tournoiNom: team.tournoi && typeof team.tournoi === 'object' ? team.tournoi.nom : 'N/A',
-        }));
-        setTeams(updatedTeams);
-      })
-      .catch((error) => {
-        console.error('Erreur lors du chargement des équipes:', error);
-      });
-  };
-
-  const navigateToEditTeam = (teamId: number) => {
-    navigate(`/edit-team/${teamId}`);
-  };
-
-  const deleteTeam = (teamId: number) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?')) {
-      axios.delete(`http://localhost:8080/api/teams/${teamId}`)
-        .then(() => {
-          console.log('Équipe supprimée');
-          loadTeams();
-        })
-        .catch((error) => {
-          console.error('Erreur lors de la suppression de l\'équipe:', error);
-        });
+  const loadTeams = async () => {
+    try {
+      const data = await getAllEquipes()
+      const updatedTeams = data.map((team: any) => ({
+        ...team,
+        tournoiNom: team.tournoi && typeof team.tournoi === "object" ? team.tournoi.nom : "N/A",
+      }))
+      setTeams(updatedTeams)
+    } catch (error: any) {
+      console.error("Erreur lors du chargement des équipes:", error)
     }
-  };
+  }
 
-  const viewMembers = (teamId: number) => {
-    setSelectedTeam(teamId);
-    axios.get(`http://localhost:8080/api/teams/${teamId}/members`)
-      .then((response) => {
-        setMembers(response.data);
-      })
-      .catch((error) => {
-        console.error('Erreur lors du chargement des membres:', error);
-      });
-  };
+  const loadMembers = async (teamId: number) => {
+    setSelectedTeam(teamId)
+    try {
+      const data = await getTeamMembers(teamId)
+      setMembers(data)
+    } catch (error: any) {
+      console.error("Erreur lors du chargement des membres:", error)
+    }
+  }
 
-  const addMember = () => {
+  const deleteTeam = async (teamId: number) => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette équipe ?")) {
+      try {
+        await deleteEquipe(teamId)
+        setTeams(teams.filter((team) => team.id !== teamId))
+        if (selectedTeam === teamId) {
+          setSelectedTeam(null)
+          setMembers([])
+          setNewMember({ nom: "", prenom: "" })
+          setEditingMember(null)
+          setIsEditing(false)
+        }
+      } catch (error: any) {
+        console.error("Erreur lors de la suppression de l'équipe:", error)
+      }
+    }
+  }
+
+  const deleteMember = async (memberId: number) => {
+    if (selectedTeam && window.confirm("Êtes-vous sûr de vouloir supprimer ce membre ?")) {
+      try {
+        await deleteTeamMember(selectedTeam, memberId)
+        setMembers(members.filter((m) => m.id !== memberId))
+        setEditingMember(null)
+        setIsEditing(false)
+      } catch (error: any) {
+        console.error("Erreur lors de la suppression du membre:", error)
+      }
+    }
+  }
+
+  const addMember = async () => {
     if (selectedTeam && newMember.nom && newMember.prenom) {
-      const memberData = { ...newMember, equipeId: selectedTeam };
-      axios.post(`http://localhost:8080/api/teams/${selectedTeam}/members`, memberData)
-        .then((response) => {
-          console.log('Membre ajouté:', response.data);
-          setMembers([...members, response.data]);
-          setNewMember({ nom: '', prenom: '', equipeId: null });
-        })
-        .catch((error) => {
-          console.error('Erreur lors de l\'ajout du membre:', error);
-        });
+      const memberData = { ...newMember, equipeId: selectedTeam }
+      try {
+        const response = await addMemberToTeam(selectedTeam, memberData)
+        setMembers([...members, response])
+        setNewMember({ nom: "", prenom: "" })
+      } catch (error: any) {
+        console.error("Erreur lors de l'ajout du membre:", error)
+      }
     } else {
-      alert('Veuillez remplir tous les champs.');
+      alert("Veuillez remplir tous les champs.")
     }
-  };
+  }
 
-  const editMember = (memberId: number) => {
-    const member = members.find((m) => m.id === memberId);
-    if (member) {
-      setEditingMember({ ...member });
-    } else {
-      console.error('Membre non trouvé');
-    }
-  };
+  const startEditingMember = (member: any) => {
+    setEditingMember({ ...member })
+    setIsEditing(true)
+  }
 
-  const updateMember = () => {
-    if (editingMember && editingMember.id) {
-      axios.put(`http://localhost:8080/api/teams/${selectedTeam}/members/${editingMember.id}`, editingMember)
-        .then(() => {
-          console.log('Membre modifié');
-          loadTeams();
-          setEditingMember(null);
+  const updateMember = async () => {
+    if (selectedTeam && editingMember && editingMember.nom && editingMember.prenom) {
+      try {
+        const response = await updateTeamMember(selectedTeam, editingMember.id, {
+          nom: editingMember.nom,
+          prenom: editingMember.prenom,
         })
-        .catch((error) => {
-          console.error('Erreur lors de la modification du membre:', error);
-        });
+        setMembers(members.map((m) => (m.id === response.id ? response : m)))
+        setEditingMember(null)
+        setIsEditing(false)
+      } catch (error: any) {
+        console.error("Erreur lors de la modification du membre:", error)
+      }
+    } else {
+      alert("Veuillez remplir tous les champs.")
     }
-  };
+  }
 
-  const deleteMember = (memberId: number) => {
-    axios.delete(`http://localhost:8080/api/teams/${selectedTeam}/members/${memberId}`)
-      .then(() => {
-        console.log('Membre supprimé');
-        setMembers(members.filter((m) => m.id !== memberId));
-      })
-      .catch((error) => {
-        console.error('Erreur lors de la suppression du membre:', error);
-      });
-  };
+  const cancelEditing = () => {
+    setEditingMember(null)
+    setIsEditing(false)
+  }
 
   return (
-    <div className="dashboard-container">
-      <style>
-        {`
-          .dashboard-container {
-            display: flex;
-            height: 100vh;
-          }
+    <div className="flex min-h-screen bg-gradient-to-br from-[#6BA7E2]/5 via-white to-[#1b3971]/5">
+      <Sidebar />
+      <main className="flex-1 ml-64 p-8">
+        <div className="space-y-8">
+          {/* Header */}
+          <div className="text-center">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] bg-clip-text text-transparent mb-4">
+              Gestion des Équipes
+            </h1>
+          </div>
 
-          .sidebar {
-            width: 250px;
-            background-color: #6BA7E2;
-            color: white;
-            padding: 20px;
-          }
+          {/* Teams Table */}
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <div className="bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] text-white p-6">
+              <h2 className="text-xl font-bold">Liste des Équipes</h2>
+            </div>
 
-          .logo-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-          }
-
-          .logo {
-            width: 100px;
-            margin-right: 80px;
-          }
-
-          .sidebar-menu ul {
-            list-style: none;
-            padding: 0;
-          }
-
-          .sidebar-menu li {
-            margin-bottom: 15px;
-          }
-
-          .sidebar-menu a {
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-          }
-
-          .sidebar-menu a.active {
-            font-weight: bold;
-          }
-
-          .sidebar-menu i {
-            margin-right: 10px;
-          }
-
-          .content {
-            flex-grow: 1;
-            padding: 30px;
-            background-color: #f5f5f5;
-            height: calc(100vh - 60px);
-            overflow-y: auto;
-          }
-
-          .team-management-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-          }
-
-          .teams-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-          }
-
-          .teams-table th,
-          .teams-table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-          }
-
-          .teams-table td button.btn-primary {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            margin-right: 10px;
-          }
-
-          .members-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            margin-bottom: 20px;
-          }
-
-          .members-table th,
-          .members-table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-          }
-
-          .members-table th {
-            background-color: #f0f0f0;
-            font-weight: bold;
-          }
-
-          .members-table td button {
-            margin-right: 5px;
-          }
-
-          .members-table td button.btn {
-            padding: 5px 10px;
-            font-size: 0.9rem;
-            border-radius: 4px;
-            cursor: pointer;
-          }
-
-          .members-table td button.btn-primary {
-            background-color: #007bff;
-            color: white;
-            border: none;
-          }
-
-          .members-table td button.btn-danger {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-          }
-
-          .team-management-container div {
-            margin-bottom: 20px;
-          }
-
-          .team-management-container label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-          }
-
-          .team-management-container input[type="text"] {
-            padding: 8px;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
-          }
-
-          .team-management-container h4 {
-            margin-top: 30px;
-            font-size: 18px;
-            color: #333;
-          }
-
-          .team-management-container button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-          }
-
-          .team-management-container button.btn-success {
-            background-color: #28a745;
-          }
-
-          .team-management-container button.btn-primary {
-            background-color: #007bff;
-          }
-
-          .team-management-container button:hover {
-            opacity: 0.9;
-          }
-
-          .team-management-container button.btn-success:hover {
-            background-color: #218838;
-          }
-
-          .team-management-container button.btn-primary:hover {
-            background-color: #0056b3;
-          }
-        `}
-      </style>
-      <aside className="sidebar">
-        <div className="logo-container">
-          {/* <img src="assets/logo.png" alt="Tournify Logo" className="logo"> */}
-          {/* <h2>Tournify</h2> */}
-        </div>
-        <nav className="sidebar-menu">
-          <ul>
-            {/* <li><a href="/admin/users"><i className="fa fa-user"></i> Gestion des Utilisateurs</a></li> */}
-            <li><a href="/dashboard-admin"><i className="fa fa-trophy"></i> Gestion des Tournois</a></li>
-            <li><a href="/admin/teams"><i className="fa fa-users"></i> Gestion des Équipes</a></li>
-            <li><a href="/gestion-matchs"><i className="fa fa-life-ring"></i> Matchs & Résultats</a></li>
-            <li><a href="/admin/results"><i className="fa fa-bar-chart"></i> Classements équipes/joueurs</a></li>
-          </ul>
-        </nav>
-      </aside>
-
-      <main className="content">
-        <div className="team-management-container">
-          <h2>Gestion des Équipes</h2>
-          <table className="teams-table">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Nom de l'Équipe</th>
-                <th>Catégorie</th>
-                <th>Tournoi</th>
-                <th>Membres</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {teams.map((team) => (
-                <tr key={team.id}>
-                  <td>{team.id}</td>
-                  <td>{team.nom}</td>
-                  <td>{team.categorie}</td>
-                  <td>{team.tournoiNom}</td>
-                  <td>
-                    <button className="btn btn-info" onClick={() => viewMembers(team.id)}>
-                      Consulter
-                    </button>
-                  </td>
-                  <td>
-                    <button className="btn btn-primary" onClick={() => navigateToEditTeam(team.id)}>
-                      Modifier
-                    </button>
-                    <button className="btn btn-danger" onClick={() => deleteTeam(team.id)}>
-                      Supprimer
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <button className="btn btn-success" onClick={() => navigate('/create-team')}>
-            Ajouter une nouvelle Équipe
-          </button>
-
-          {selectedTeam && (
-            <div>
-              <h3>Membres de l'Équipe</h3>
-              <table className="members-table">
-                <thead>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th>Id</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Action</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Id</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nom de l'Équipe</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Catégorie</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Tournoi</th>
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Membres</th>
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Action</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {members.map((member) => (
-                    <tr key={member.id}>
-                      <td>{member.id}</td>
-                      <td>{member.nom}</td>
-                      <td>{member.prenom}</td>
-                      <td>
-                        <button className="btn btn-primary" onClick={() => editMember(member.id)}>
-                          Modifier
+                <tbody className="divide-y divide-gray-200">
+                  {teams.map((team) => (
+                    <tr key={team.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900">{team.id}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">{team.nom}</td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#6BA7E2]/10 text-[#6BA7E2]">
+                          {team.categorie}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">{team.tournoiNom}</td>
+                      <td className="px-6 py-4 text-center">
+                        <button
+                          className="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm font-medium transition-colors"
+                          onClick={() => loadMembers(team.id)}
+                        >
+                          Consulter
                         </button>
-                        <button className="btn btn-danger" onClick={() => deleteMember(member.id)}>
-                          Supprimer
-                        </button>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-center space-x-2">
+                          <button
+                            className="bg-[#6BA7E2] hover:bg-[#5a96d1] text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors"
+                            onClick={() => navigate(`/teams/edit/${team.id}`)}
+                          >
+                            Modifier
+                          </button>
+                          <button
+                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors"
+                            onClick={() => deleteTeam(team.id)}
+                          >
+                            Supprimer
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
 
-              <h4>Ajouter un Nouveau Membre</h4>
-              <div>
-                <label>Nom</label>
-                <input
-                  type="text"
-                  value={newMember.nom}
-                  onChange={(e) => setNewMember({ ...newMember, nom: e.target.value })}
-                  required
-                />
-              </div>
-              <div>
-                <label>Prénom</label>
-                <input
-                  type="text"
-                  value={newMember.prenom}
-                  onChange={(e) => setNewMember({ ...newMember, prenom: e.target.value })}
-                  required
-                />
-              </div>
-              <button className="btn btn-success" onClick={addMember}>
-                Ajouter Membre
+            <div className="p-6 bg-gray-50 border-t">
+              <button
+                className="bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] hover:from-[#5a96d1] hover:to-[#2d4a7a] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
+                onClick={() => navigate("/teams/create")}
+              >
+                Ajouter une nouvelle Équipe
               </button>
             </div>
-          )}
+          </div>
 
-          {editingMember && (
-            <div>
-              <h4>Modifier Membre</h4>
-              <div>
-                <label>Nom</label>
-                <input
-                  type="text"
-                  value={editingMember.nom}
-                  onChange={(e) => setEditingMember({ ...editingMember, nom: e.target.value })}
-                  required
-                />
+          {/* Members Section */}
+          {selectedTeam && (
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+              <div className="bg-gradient-to-r from-[#1b3971] to-[#6BA7E2] text-white p-6">
+                <h3 className="text-xl font-bold">Membres de l'Équipe</h3>
               </div>
-              <div>
-                <label>Prénom</label>
-                <input
-                  type="text"
-                  value={editingMember.prenom}
-                  onChange={(e) => setEditingMember({ ...editingMember, prenom: e.target.value })}
-                  required
-                />
+
+              <div className="p-6">
+                <div className="overflow-x-auto mb-6">
+                  <table className="w-full">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Id</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Nom</th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Prénom</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {members.map((member) => (
+                        <tr key={member.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900">{member.id}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900">{member.nom}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900">{member.prenom}</td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center justify-center space-x-2">
+                              <button
+                                className="bg-[#6BA7E2] hover:bg-[#5a96d1] text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                                onClick={() => startEditingMember(member)}
+                              >
+                                Modifier
+                              </button>
+                              <button
+                                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                                onClick={() => deleteMember(member.id)}
+                              >
+                                Supprimer
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Formulaire de modification d'un membre */}
+                {isEditing && editingMember && (
+                  <div className="bg-gray-50 rounded-xl p-6 mt-6">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Modifier un Membre</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
+                        <input
+                          type="text"
+                          value={editingMember.nom}
+                          onChange={(e) =>
+                            setEditingMember({ ...editingMember, nom: e.target.value })
+                          }
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6BA7E2] focus:border-transparent"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
+                        <input
+                          type="text"
+                          value={editingMember.prenom}
+                          onChange={(e) =>
+                            setEditingMember({ ...editingMember, prenom: e.target.value })
+                          }
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6BA7E2] focus:border-transparent"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-4 flex gap-4">
+                      <button
+                        className="bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] text-white px-6 py-2 rounded-lg font-medium hover:from-[#5a96d1] hover:to-[#2d4a7a] transition-all"
+                        onClick={updateMember}
+                      >
+                        Sauvegarder
+                      </button>
+                      <button
+                        className="bg-gray-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-600 transition-all"
+                        onClick={cancelEditing}
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Formulaire d'ajout d'un nouveau membre */}
+                <div className="bg-gray-50 rounded-xl p-6 mt-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Ajouter un Nouveau Membre</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
+                      <input
+                        type="text"
+                        value={newMember.nom}
+                        onChange={(e) => setNewMember({ ...newMember, nom: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6BA7E2] focus:border-transparent"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
+                      <input
+                        type="text"
+                        value={newMember.prenom}
+                        onChange={(e) => setNewMember({ ...newMember, prenom: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6BA7E2] focus:border-transparent"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <button
+                    className="mt-4 bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] text-white px-6 py-2 rounded-lg font-medium hover:from-[#5a96d1] hover:to-[#2d4a7a] transition-all"
+                    onClick={addMember}
+                  >
+                    Ajouter Membre
+                  </button>
+                </div>
               </div>
-              <button className="btn btn-primary" onClick={updateMember}>
-                Enregistrer les modifications
-              </button>
             </div>
           )}
         </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default TeamManagement;
+export default TeamManagement

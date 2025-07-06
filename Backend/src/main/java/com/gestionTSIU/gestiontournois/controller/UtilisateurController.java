@@ -11,39 +11,39 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/utilisateurs")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class UtilisateurController {
 
     @Autowired
     private UtilisateurService utilisateurService;
 
-    // Inscription d'un utilisateur
     @PostMapping("/register")
     public ResponseEntity<?> registerUtilisateur(@RequestBody Utilisateur utilisateur) {
         try {
-            // Définir le rôle automatiquement sur "Administrateur"
-            utilisateur.setRole("Administrateur");
-
-            // Enregistrer l'utilisateur
+            utilisateur.setRole("USER");
             Utilisateur newUser = utilisateurService.createUtilisateur(utilisateur);
             return ResponseEntity.ok(newUser);
         } catch (Exception e) {
-            e.printStackTrace(); // Log complet de l'erreur
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Erreur lors de l'inscription : " + e.getMessage());
         }
     }
 
-    // Connexion d'un utilisateur
     @PostMapping("/login")
     public ResponseEntity<?> loginUtilisateur(@RequestBody Utilisateur utilisateur) {
+        System.out.println("Tentative de connexion pour l'email : " + utilisateur.getEmail());
         try {
             Utilisateur existingUser = utilisateurService.authenticate(utilisateur.getEmail(), utilisateur.getPassword());
             if (existingUser != null) {
-                // Vérifiez le rôle de l'utilisateur et renvoyez le rôle approprié
-                return ResponseEntity.ok(existingUser);
+                String token = utilisateurService.generateToken(existingUser);
+                System.out.println("Connexion réussie pour l'utilisateur : " + utilisateur.getEmail());
+                return ResponseEntity.ok(new LoginResponse(existingUser, token));
             } else {
+                System.out.println("Échec de la connexion pour l'email : " + utilisateur.getEmail());
                 return ResponseEntity.status(401).body("Échec de la connexion. Informations de connexion invalides.");
             }
         } catch (Exception e) {
+            System.err.println("Erreur lors de la connexion : " + e.getMessage());
             return ResponseEntity.badRequest().body("Erreur lors de la connexion : " + e.getMessage());
         }
     }
@@ -68,12 +68,27 @@ public class UtilisateurController {
         utilisateurService.deleteUtilisateur(id);
     }
 
-    // Créer un utilisateur avec un rôle spécifique
     @PostMapping("/create-with-role")
     public ResponseEntity<Utilisateur> createUser(@RequestBody Utilisateur user) {
-        // Logique pour créer un utilisateur avec le rôle spécifié
         Utilisateur createdUser = utilisateurService.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
-}
 
+    static class LoginResponse {
+        private Utilisateur user;
+        private String token;
+
+        public LoginResponse(Utilisateur user, String token) {
+            this.user = user;
+            this.token = token;
+        }
+
+        public Utilisateur getUser() {
+            return user;
+        }
+
+        public String getToken() {
+            return token;
+        }
+    }
+}

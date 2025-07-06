@@ -29,15 +29,10 @@ public class EquipeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Equipe> getEquipeById(@PathVariable Long id) {
-        // Rechercher l'équipe par son ID
         Equipe equipe = equipeService.findById(id);
-
-        // Si l'équipe n'est pas trouvée, retourner une réponse 404
         if (equipe == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-
-        // Si l'équipe est trouvée, retourner la réponse avec les détails de l'équipe
         return ResponseEntity.ok(equipe);
     }
 
@@ -62,30 +57,20 @@ public class EquipeController {
         }
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEquipe(@PathVariable Long id, @RequestBody Equipe equipeDetails) {
         try {
-            // Appeler le service pour mettre à jour l'équipe
             Equipe updatedEquipe = equipeService.updateEquipe(id, equipeDetails);
-
-            // Si l'équipe n'existe pas
             if (updatedEquipe == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Équipe non trouvée");
             }
-
-            // Retourner l'équipe mise à jour
             return ResponseEntity.ok(updatedEquipe);
         } catch (IllegalArgumentException e) {
-            // Gestion des erreurs liées à des champs invalides
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            // Pour toute autre erreur
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la mise à jour de l'équipe : " + e.getMessage());
         }
     }
-
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEquipe(@PathVariable Long id) {
@@ -93,8 +78,6 @@ public class EquipeController {
         return ResponseEntity.noContent().build();
     }
 
-
-    // New endpoint to fetch the members of a specific team
     @GetMapping("/{teamId}/members")
     public ResponseEntity<List<Membre>> getTeamMembers(@PathVariable Long teamId) {
         List<Membre> members = equipeService.getMembersByTeamId(teamId);
@@ -125,7 +108,6 @@ public class EquipeController {
         }
     }
 
-
     @DeleteMapping("/{teamId}/members/{memberId}")
     public ResponseEntity<?> deleteMember(@PathVariable Long teamId, @PathVariable Long memberId) {
         try {
@@ -136,4 +118,17 @@ public class EquipeController {
         }
     }
 
+    // Nouvel endpoint pour récupérer un membre spécifique par ID
+    @GetMapping("/{teamId}/members/{memberId}")
+    public ResponseEntity<Membre> getMemberById(@PathVariable Long teamId, @PathVariable Long memberId) {
+        try {
+            Membre membre = equipeService.getMemberById(teamId, memberId);
+            if (membre == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            return ResponseEntity.ok(membre);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }

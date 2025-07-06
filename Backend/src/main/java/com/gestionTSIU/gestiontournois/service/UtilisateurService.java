@@ -2,9 +2,15 @@ package com.gestionTSIU.gestiontournois.service;
 
 import com.gestionTSIU.gestiontournois.model.Utilisateur;
 import com.gestionTSIU.gestiontournois.repository.UtilisateurRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -13,23 +19,40 @@ public class UtilisateurService {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
-    // Méthode pour créer un nouvel utilisateur (Inscription)
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${jwt.expiration}")
+    private long jwtExpiration;
+
     public Utilisateur createUtilisateur(Utilisateur utilisateur) {
-        // Vérifiez si l'utilisateur existe déjà par email
         if (utilisateurRepository.existsByEmail(utilisateur.getEmail())) {
             throw new RuntimeException("Cet email est déjà utilisé.");
         }
+        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
         return utilisateurRepository.save(utilisateur);
     }
 
-    // Méthode pour authentifier un utilisateur (Connexion)
     public Utilisateur authenticate(String email, String password) {
-        // Chercher l'utilisateur par email et vérifier le mot de passe
         Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
-        if (utilisateur != null && utilisateur.getPassword().equals(password)) {
+        if (utilisateur != null && passwordEncoder.matches(password, utilisateur.getPassword())) {
             return utilisateur;
         }
-        return null; // Retourne null si l'authentification échoue
+        return null;
+    }
+
+    public String generateToken(Utilisateur utilisateur) {
+        Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        return Jwts.builder()
+                .setSubject(utilisateur.getEmail())
+                .claim("role", utilisateur.getRole())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(key)
+                .compact();
     }
 
     public List<Utilisateur> getAllUtilisateurs() {
@@ -46,7 +69,9 @@ public class UtilisateurService {
             utilisateur.setNom(utilisateurDetails.getNom());
             utilisateur.setPrenom(utilisateurDetails.getPrenom());
             utilisateur.setEmail(utilisateurDetails.getEmail());
-            utilisateur.setPassword(utilisateurDetails.getPassword());
+            if (utilisateurDetails.getPassword() != null && !utilisateurDetails.getPassword().isEmpty()) {
+                utilisateur.setPassword(passwordEncoder.encode(utilisateurDetails.getPassword()));
+            }
             utilisateur.setRole(utilisateurDetails.getRole());
             return utilisateurRepository.save(utilisateur);
         }
@@ -57,9 +82,14 @@ public class UtilisateurService {
         utilisateurRepository.deleteById(id);
     }
 
-    public Utilisateur createUser(Utilisateur user) {
-        // Ajoutez la logique pour définir le rôle et sauvegarder l'utilisateur
-        user.setRole(user.getRole()); // Définir le rôle, par exemple 'CommunityManager'
-        return utilisateurRepository.save(user);
+      public Utilisateur createUser(Utilisateur user) {
+    System.out.println("Tentative de création avec rôle: " + user.getRole());
+    if (utilisateurRepository.existsByEmail(user.getEmail())) {
+        throw new RuntimeException("Cet email est déjà utilisé.");
     }
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    Utilisateur savedUser = utilisateurRepository.save(user);
+    System.out.println("Utilisateur créé avec rôle: " + savedUser.getRole());
+    return savedUser;
+}
 }

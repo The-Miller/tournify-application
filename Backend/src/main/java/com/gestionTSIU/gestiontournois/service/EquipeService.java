@@ -115,5 +115,12 @@ public class EquipeService {
         membreRepository.delete(membre); // Suppression du membre
     }
 
-
+    public Membre getMemberById(Long teamId, Long memberId) {
+            // Implémentation : récupérer un membre spécifique par son ID dans une équipe
+            List<Membre> members = getMembersByTeamId(teamId);
+            return members.stream()
+                    .filter(m -> m.getId().equals(memberId))
+                    .findFirst()
+                    .orElse(null);
+        }
 }
