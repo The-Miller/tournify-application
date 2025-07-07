@@ -234,6 +234,8 @@
 import type React from "react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 
 const Tournois: React.FC = () => {
   const [currentImage, setCurrentImage] = useState("assets/img1.png")
@@ -336,112 +338,43 @@ const Tournois: React.FC = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      {/* Hero Section */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent leading-tight">
-                  Programmez votre prochain tournoi avec Toornament
-                </h1>
-                <div className="space-y-2 text-lg text-slate-600">
-                  <p className="flex items-center">
-                    <svg className="h-5 w-5 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
-                    Planification simple et rapide
-                  </p>
-                  <p className="flex items-center">
-                    <svg className="h-5 w-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-9 5a9 9 0 1118 0 9 9 0 01-18 0z"
-                      />
-                    </svg>
-                    Superbe affichage en direct et en continu
-                  </p>
-                  <p className="flex items-center">
-                    <svg className="h-5 w-5 mr-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                      />
-                    </svg>
-                    Page d'inscription en ligne
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => navigate("/connexion")}
-                  className="h-14 px-8 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold text-lg rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
-                >
-                  Créer gratuitement un tournoi
-                </button>
-                <button
-                  onClick={() => navigate("/video")}
-                  className="h-14 px-8 border-2 border-blue-300 text-blue-600 hover:bg-blue-50 font-semibold text-lg rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-9 5a9 9 0 1118 0 9 9 0 01-18 0z"
-                    />
-                  </svg>
-                  Voir la vidéo
-                </button>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-3xl blur-3xl opacity-20"></div>
-              <img
-                src="assets/img.png"
-                alt="Tournoi Image"
-                className="relative w-full h-auto rounded-3xl shadow-2xl border border-white/20"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Features List */}
-            <div className="space-y-6">
-              {features.map((feature) => (
-                <div
-                  key={feature.id}
-                  className={`cursor-pointer transition-all duration-300 transform hover:scale-[1.02] p-6 rounded-2xl ${
-                    activeSection === feature.id
-                      ? "bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 shadow-lg"
-                      : "bg-white/80 backdrop-blur-sm hover:shadow-md border border-gray-100"
-                  }`}
-                  onClick={() => changeImage(feature.id)}
-                >
-                  <div className="flex items-start space-x-4">
-                    <div
-                      className={`p-3 rounded-xl ${
-                        activeSection === feature.id
-                          ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
-                          : "bg-slate-100 text-slate-600"
-                      }`}
-                    >
-                      <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div>
+      <Header/>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        {/* Hero Section */}
+        <section className="py-20 px-6">
+          <div className="container mx-auto max-w-7xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent leading-tight">
+                    Programmez votre prochain tournoi avec Toornament
+                  </h1>
+                  <div className="space-y-2 text-lg text-slate-600">
+                    <p className="flex items-center">
+                      <svg className="h-5 w-5 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      Planification simple et rapide
+                    </p>
+                    <p className="flex items-center">
+                      <svg className="h-5 w-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-9 5a9 9 0 1118 0 9 9 0 01-18 0z"
+                        />
+                      </svg>
+                      Superbe affichage en direct et en continu
+                    </p>
+                    <p className="flex items-center">
+                      <svg className="h-5 w-5 mr-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -449,155 +382,307 @@ const Tournois: React.FC = () => {
                           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                         />
                       </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-slate-800 mb-2">{feature.title}</h3>
-                      <p className="text-slate-600 leading-relaxed">{feature.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Feature Image */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-3xl blur-3xl opacity-20"></div>
-              <img
-                src={currentImage || "/placeholder.svg"}
-                alt="Feature Image"
-                className="relative w-full h-auto rounded-3xl shadow-2xl border border-white/20"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Sports Section */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
-              Toornament propose ces différents sports
-            </h2>
-            <p className="text-xl text-slate-600">
-              Choisissez parmi nos sports disponibles pour organiser votre tournoi
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {sports.map((sport, index) => (
-              <div
-                key={index}
-                className="group bg-white/80 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] overflow-hidden rounded-2xl"
-              >
-                <div className={`bg-gradient-to-r ${sport.color} text-white p-6`}>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
-                      <img
-                        src={sport.image || "/placeholder.svg"}
-                        alt={sport.name}
-                        className="w-10 h-10 object-cover rounded-lg"
-                      />
-                    </div>
-                    <h3 className="text-2xl font-bold">{sport.name}</h3>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <p className="text-slate-600 leading-relaxed">{sport.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Rankings Section */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto max-w-7xl">
-          <div className="bg-white/80 backdrop-blur-sm border-0 shadow-2xl overflow-hidden rounded-2xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-              <div className="p-12 flex flex-col justify-center">
-                <div className="space-y-6">
-                  <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                    Classements en direct
-                  </h2>
-                  <div className="space-y-4 text-lg text-slate-600">
-                    <p>
-                      Suivez l'évolution des compétitions en temps réel grâce à notre fonctionnalité de classements en
-                      direct ! Que ce soit pour le football, le basketball ou le handball, restez informé de la
-                      performance de vos équipes et joueurs préférés à chaque instant.
-                    </p>
-                    <p>
-                      Nos tableaux de classements sont mis à jour automatiquement après chaque match, vous offrant une
-                      vue complète sur les résultats, les points marqués et les statistiques essentielles.
+                      Page d'inscription en ligne
                     </p>
                   </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4">
                   <button
-                    onClick={redirectToClassifications}
-                    className="w-fit h-12 px-8 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] flex items-center gap-2"
+                    onClick={() => navigate("/connexion")}
+                    className="h-14 px-8 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold text-lg rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
+                  >
+                    Créer gratuitement un tournoi
+                  </button>
+                  <button
+                    onClick={() => navigate("/video")}
+                    className="h-14 px-8 border-2 border-blue-300 text-blue-600 hover:bg-blue-50 font-semibold text-lg rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
                   >
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-9 5a9 9 0 1118 0 9 9 0 01-18 0z"
                       />
                     </svg>
-                    Consulter les classements
+                    Voir la vidéo
                   </button>
                 </div>
               </div>
-              <div className="relative p-12">
-                <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 opacity-10"></div>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-3xl blur-3xl opacity-20"></div>
                 <img
-                  src="assets/ranking.png"
-                  alt="Classements"
-                  className="relative w-full h-auto rounded-2xl shadow-xl"
+                  src="assets/img.png"
+                  alt="Tournoi Image"
+                  className="relative w-full h-auto rounded-3xl shadow-2xl border border-white/20"
                 />
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Predictions Section */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
-              Tentez votre chance avec nos jeux de pronostics
-            </h2>
-            <p className="text-xl text-slate-600">Prédisez les résultats et gagnez des points !</p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Predictions Form */}
-            <div className="bg-white/80 backdrop-blur-sm border-0 shadow-xl rounded-2xl overflow-hidden">
-              <div className="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-6">
-                <h3 className="text-xl font-semibold flex items-center">
-                  <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                    />
-                  </svg>
-                  Pronostics pour les matchs en attente
-                </h3>
+        {/* Features Section */}
+        <section className="py-20 px-6">
+          <div className="container mx-auto max-w-7xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Features List */}
+              <div className="space-y-6">
+                {features.map((feature) => (
+                  <div
+                    key={feature.id}
+                    className={`cursor-pointer transition-all duration-300 transform hover:scale-[1.02] p-6 rounded-2xl ${
+                      activeSection === feature.id
+                        ? "bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 shadow-lg"
+                        : "bg-white/80 backdrop-blur-sm hover:shadow-md border border-gray-100"
+                    }`}
+                    onClick={() => changeImage(feature.id)}
+                  >
+                    <div className="flex items-start space-x-4">
+                      <div
+                        className={`p-3 rounded-xl ${
+                          activeSection === feature.id
+                            ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
+                            : "bg-slate-100 text-slate-600"
+                        }`}
+                      >
+                        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-slate-800 mb-2">{feature.title}</h3>
+                        <p className="text-slate-600 leading-relaxed">{feature.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              <div className="p-6 space-y-6">
-                {matches.map((match) => (
-                  <div
-                    key={match.id}
-                    className="border border-slate-200 hover:border-purple-300 transition-colors rounded-xl p-6"
-                  >
-                    <div className="space-y-4">
+              {/* Feature Image */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-3xl blur-3xl opacity-20"></div>
+                <img
+                  src={currentImage || "/placeholder.svg"}
+                  alt="Feature Image"
+                  className="relative w-full h-auto rounded-3xl shadow-2xl border border-white/20"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Sports Section */}
+        <section className="py-20 px-6">
+          <div className="container mx-auto max-w-7xl">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+                Toornament propose ces différents sports
+              </h2>
+              <p className="text-xl text-slate-600">
+                Choisissez parmi nos sports disponibles pour organiser votre tournoi
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {sports.map((sport, index) => (
+                <div
+                  key={index}
+                  className="group bg-white/80 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] overflow-hidden rounded-2xl"
+                >
+                  <div className={`bg-gradient-to-r ${sport.color} text-white p-6`}>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
+                        <img
+                          src={sport.image || "/placeholder.svg"}
+                          alt={sport.name}
+                          className="w-10 h-10 object-cover rounded-lg"
+                        />
+                      </div>
+                      <h3 className="text-2xl font-bold">{sport.name}</h3>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-slate-600 leading-relaxed">{sport.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Rankings Section */}
+        <section className="py-20 px-6">
+          <div className="container mx-auto max-w-7xl">
+            <div className="bg-white/80 backdrop-blur-sm border-0 shadow-2xl overflow-hidden rounded-2xl">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                <div className="p-12 flex flex-col justify-center">
+                  <div className="space-y-6">
+                    <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                      Classements en direct
+                    </h2>
+                    <div className="space-y-4 text-lg text-slate-600">
+                      <p>
+                        Suivez l'évolution des compétitions en temps réel grâce à notre fonctionnalité de classements en
+                        direct ! Que ce soit pour le football, le basketball ou le handball, restez informé de la
+                        performance de vos équipes et joueurs préférés à chaque instant.
+                      </p>
+                      <p>
+                        Nos tableaux de classements sont mis à jour automatiquement après chaque match, vous offrant une
+                        vue complète sur les résultats, les points marqués et les statistiques essentielles.
+                      </p>
+                    </div>
+                    <button
+                      onClick={redirectToClassifications}
+                      className="w-fit h-12 px-8 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] flex items-center gap-2"
+                    >
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                        />
+                      </svg>
+                      Consulter les classements
+                    </button>
+                  </div>
+                </div>
+                <div className="relative p-12">
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 opacity-10"></div>
+                  <img
+                    src="assets/ranking.png"
+                    alt="Classements"
+                    className="relative w-full h-auto rounded-2xl shadow-xl"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Predictions Section */}
+        <section className="py-20 px-6">
+          <div className="container mx-auto max-w-7xl">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+                Tentez votre chance avec nos jeux de pronostics
+              </h2>
+              <p className="text-xl text-slate-600">Prédisez les résultats et gagnez des points !</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Predictions Form */}
+              <div className="bg-white/80 backdrop-blur-sm border-0 shadow-xl rounded-2xl overflow-hidden">
+                <div className="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-6">
+                  <h3 className="text-xl font-semibold flex items-center">
+                    <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                      />
+                    </svg>
+                    Pronostics pour les matchs en attente
+                  </h3>
+                </div>
+
+                <div className="p-6 space-y-6">
+                  {matches.map((match) => (
+                    <div
+                      key={match.id}
+                      className="border border-slate-200 hover:border-purple-300 transition-colors rounded-xl p-6"
+                    >
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-300">
+                            {match.equipeA.nom} vs {match.equipeB.nom}
+                          </span>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            <svg className="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                              />
+                            </svg>
+                            {match.date}
+                          </span>
+                        </div>
+
+                        <div className="space-y-3">
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">Équipe gagnante</label>
+                            <select
+                              value={match.predictedTeam}
+                              onChange={(e) => handleTeamChange(match.id, e.target.value)}
+                              className="w-full h-12 px-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                            >
+                              <option value="">Sélectionner une équipe</option>
+                              <option value={match.equipeA.nom}>{match.equipeA.nom}</option>
+                              <option value={match.equipeB.nom}>{match.equipeB.nom}</option>
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">Joueur marquant</label>
+                            <input
+                              value={match.predictedScorer}
+                              onChange={(e) => handleScorerChange(match.id, e.target.value)}
+                              placeholder="Entrez le nom du joueur"
+                              className="w-full h-12 px-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                            />
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => submitPrediction(match.id)}
+                          className="w-full h-12 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2"
+                        >
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                            />
+                          </svg>
+                          Envoyer Pronostic
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Previous Predictions */}
+              <div className="bg-white/80 backdrop-blur-sm border-0 shadow-xl rounded-2xl overflow-hidden">
+                <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-6">
+                  <h3 className="text-xl font-semibold flex items-center">
+                    <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                      />
+                    </svg>
+                    Pronostics déjà effectués
+                  </h3>
+                </div>
+
+                <div className="p-6">
+                  <div className="border border-slate-200 rounded-xl p-6">
+                    <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-300">
-                          {match.equipeA.nom} vs {match.equipeB.nom}
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-300">
+                          ESTM vs ENSUP
                         </span>
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                           <svg className="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -608,135 +693,57 @@ const Tournois: React.FC = () => {
                               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                             />
                           </svg>
-                          {match.date}
+                          2025-07-10
                         </span>
                       </div>
-
-                      <div className="space-y-3">
-                        <div>
-                          <label className="block text-sm font-medium text-slate-700 mb-2">Équipe gagnante</label>
-                          <select
-                            value={match.predictedTeam}
-                            onChange={(e) => handleTeamChange(match.id, e.target.value)}
-                            className="w-full h-12 px-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                      <div className="space-y-2 text-sm">
+                        <p className="flex items-center">
+                          <svg
+                            className="h-4 w-4 mr-2 text-green-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                            <option value="">Sélectionner une équipe</option>
-                            <option value={match.equipeA.nom}>{match.equipeA.nom}</option>
-                            <option value={match.equipeB.nom}>{match.equipeB.nom}</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-slate-700 mb-2">Joueur marquant</label>
-                          <input
-                            value={match.predictedScorer}
-                            onChange={(e) => handleScorerChange(match.id, e.target.value)}
-                            placeholder="Entrez le nom du joueur"
-                            className="w-full h-12 px-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                          />
-                        </div>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                            />
+                          </svg>
+                          <span className="font-medium">Équipe gagnante:</span>
+                          <span className="ml-2 text-green-600 font-semibold">ESTM</span>
+                        </p>
+                        <p className="flex items-center">
+                          <svg
+                            className="h-4 w-4 mr-2 text-blue-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                          </svg>
+                          <span className="font-medium">Joueur marquant:</span>
+                          <span className="ml-2 text-blue-600 font-semibold">Aliou Diaw</span>
+                        </p>
                       </div>
-
-                      <button
-                        onClick={() => submitPrediction(match.id)}
-                        className="w-full h-12 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2"
-                      >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                          />
-                        </svg>
-                        Envoyer Pronostic
-                      </button>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Previous Predictions */}
-            <div className="bg-white/80 backdrop-blur-sm border-0 shadow-xl rounded-2xl overflow-hidden">
-              <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-6">
-                <h3 className="text-xl font-semibold flex items-center">
-                  <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                    />
-                  </svg>
-                  Pronostics déjà effectués
-                </h3>
-              </div>
-
-              <div className="p-6">
-                <div className="border border-slate-200 rounded-xl p-6">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-300">
-                        ESTM vs ENSUP
-                      </span>
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                        <svg className="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
-                        </svg>
-                        2025-07-10
-                      </span>
-                    </div>
-                    <div className="space-y-2 text-sm">
-                      <p className="flex items-center">
-                        <svg
-                          className="h-4 w-4 mr-2 text-green-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                          />
-                        </svg>
-                        <span className="font-medium">Équipe gagnante:</span>
-                        <span className="ml-2 text-green-600 font-semibold">ESTM</span>
-                      </p>
-                      <p className="flex items-center">
-                        <svg
-                          className="h-4 w-4 mr-2 text-blue-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                          />
-                        </svg>
-                        <span className="font-medium">Joueur marquant:</span>
-                        <span className="ml-2 text-blue-600 font-semibold">Aliou Diaw</span>
-                      </p>
-                    </div>
-                  </div>
+                  <p className="text-center text-slate-500 mt-6 italic">Vos autres pronostics apparaîtront ici...</p>
                 </div>
-                <p className="text-center text-slate-500 mt-6 italic">Vos autres pronostics apparaîtront ici...</p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
+      <Footer />
     </div>
+    
   )
 }
 

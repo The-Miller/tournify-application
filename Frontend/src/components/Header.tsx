@@ -124,6 +124,7 @@ const Header: React.FC = () => {
               { to: "/fil-actualite", label: "Fil d'actualité" },
               { to: "/classements", label: "Classements" },
               { to: "/contact", label: "Contact" },
+              { to: "/tournois", label: "En savoir plus" },
             ].map((item) => (
               <NavLink
                 key={item.to}
