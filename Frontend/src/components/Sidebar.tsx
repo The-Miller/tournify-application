@@ -1,149 +1,64 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// import React, { useContext } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { useAuth } from '../contexts/AuthContext';
-// import { logout } from '../api/api';
-// import './Sidebar.css';
 
-// const Sidebar: React.FC = () => {
-//   const { user, logout: authLogout } = useAuth();
-//   const navigate = useNavigate();
-
-//   const handleLogout = async () => {
-//     await authLogout();
-//     navigate('/connexion');
-//   };
-
-//   if (!user) {
-//     return null; // Ne rien afficher si aucun utilisateur n'est connecté
-//   }
-
-//   let links = [];
-//   let logoText = '';
-
-//   switch (user.role) {
-//       case 'ADMINISTRATEUR':
-//         logoText = 'Super Admin Dashboard';
-//         links = [
-//           { to: '/dashboard-superadmin', icon: 'fa-users', label: 'Tableau Super Admin' },
-//           { to: '/users', icon: 'fa-users', label: 'Gestion des Utilisateurs' },
-//           { to: '/tournaments', icon: 'fa-trophy', label: 'Gestion des Tournois' },
-//           { to: '/teams', icon: 'fa-users', label: 'Gestion des Équipes' },
-//           { to: '/matches', icon: 'fa-life-ring', label: 'Gestion des Matchs' },
-//         ];
-//         break;
-//     case 'GERANT':
-//       logoText = 'Gerant Dashboard';
-//       links = [
-//         { to: '/dashboard-admin', icon: 'fa-chart-line', label: 'Tableau de Bord' },
-//         { to: '/tournaments', icon: 'fa-trophy', label: 'Créer Tournoi' },
-//         { to: '/teams', icon: 'fa-users', label: 'Gestion des Équipes' },
-//         { to: '/matches', icon: 'fa-life-ring', label: 'Gestion des Matchs' },
-//       ];
-//       break;
-//     case 'COMMUNITY_MANAGER':
-//       logoText = 'Community Dashboard';
-//       links = [
-//         { to: '/dashboard-community', icon: 'fa-newspaper', label: 'Tableau Community' },
-//         { to: '/post-management', icon: 'fa-newspaper', label: 'Gestion des posts' },
-//       ];
-//       break;
-//     case 'UTILISATEUR':
-//       logoText = 'User Dashboard';
-//       links = [
-//         { to: '/tournois', icon: 'fa-trophy', label: 'Tournois' },
-//         { to: '/classements', icon: 'fa-trophy', label: 'Classements' },
-//       ];
-//       break;
-//     default:
-//       return null; // Pas de sidebar pour les autres rôles
-//   }
-
-//   return (
-//     <aside className="sidebar">
-//       <div className="logo-container">
-//         <h2>{logoText}</h2>
-//       </div>
-//       <nav className="sidebar-menu">
-//         <ul>
-//           {links.map((link) => (
-//             <li key={link.to}>
-//               <Link to={link.to}>
-//                 <i className={`fa ${link.icon}`}></i> {link.label}
-//               </Link>
-//             </li>
-//           ))}
-//           <li>
-//             <button onClick={handleLogout} className="logout-btn">
-//               <i className="fa fa-sign-out"></i> Déconnexion
-//             </button>
-//           </li>
-//         </ul>
-//       </nav>
-//     </aside>
-//   );
-// };
-
-// export default Sidebar;
-
-"use client"
-
-import type React from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { useAuth } from "../contexts/AuthContext"
+import type React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const Sidebar: React.FC = () => {
-  const { user, logout: authLogout } = useAuth()
-  const navigate = useNavigate()
+  const { user, logout: authLogout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await authLogout()
-    navigate("/connexion")
-  }
+    await authLogout();
+    navigate("/connexion");
+  };
 
   if (!user) {
-    return null
+    return null;
   }
 
-  let links = []
-  let logoText = ""
+  let links = [];
+  let logoText = "";
 
   switch (user.role) {
     case "ADMINISTRATEUR":
-      logoText = "Super Admin Dashboard"
+      logoText = "Super Admin Dashboard";
       links = [
         { to: "/dashboard-superadmin", icon: "fa-users", label: "Tableau Super Admin" },
         { to: "/users", icon: "fa-users", label: "Gestion des Utilisateurs" },
         { to: "/tournaments", icon: "fa-trophy", label: "Gestion des Tournois" },
         { to: "/teams", icon: "fa-users", label: "Gestion des Équipes" },
         { to: "/matches", icon: "fa-life-ring", label: "Gestion des Matchs" },
-      ]
-      break
+        { to: "/post-management", icon: "fa-newspaper", label: "Gestion des posts" },
+        // { to: "/classements/manage/:sport/:tournamentId", icon: "fa-trophy", label: "Gestion des Classements" }, // À ajuster dynamiquement
+      ];
+      break;
     case "GERANT":
-      logoText = "Gerant Dashboard"
+      logoText = "Gerant Dashboard";
       links = [
         { to: "/dashboard-admin", icon: "fa-chart-line", label: "Tableau de Bord" },
         { to: "/tournaments", icon: "fa-trophy", label: "Créer Tournoi" },
         { to: "/teams", icon: "fa-users", label: "Gestion des Équipes" },
         { to: "/matches", icon: "fa-life-ring", label: "Gestion des Matchs" },
-      ]
-      break
+        { to: "/post-management", icon: "fa-newspaper", label: "Gestion des posts" },
+     ];
+      break;
     case "COMMUNITY_MANAGER":
-      logoText = "Community Dashboard"
+      logoText = "Community Dashboard";
       links = [
         { to: "/dashboard-community", icon: "fa-newspaper", label: "Tableau Community" },
         { to: "/post-management", icon: "fa-newspaper", label: "Gestion des posts" },
-      ]
-      break
+      ];
+      break;
     case "UTILISATEUR":
-      logoText = "User Dashboard"
+      logoText = "User Dashboard";
       links = [
+        { to: "/dashboard-admin", icon: "fa-chart-line", label: "Tableau de Bord" },
         { to: "/tournois", icon: "fa-trophy", label: "Tournois" },
-        { to: "/classements", icon: "fa-trophy", label: "Classements" },
-      ]
-      break
+      ];
+      break;
     default:
-      return null
+      return null;
   }
 
   return (
@@ -212,7 +127,7 @@ const Sidebar: React.FC = () => {
         </button>
       </div>
     </aside>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

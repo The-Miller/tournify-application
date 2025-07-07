@@ -5,33 +5,36 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import Sidebar from "../components/Sidebar"
-import { getAllTournaments, getAllEquipes, fetchAllUtilisateurs, getAllReservations } from "../api/api"
+import { getAllTournaments, getAllEquipes, fetchAllUtilisateurs, getAllPosts } from "../api/api"
+import { useAuth } from "../contexts/AuthContext"
 
 const AdminOverview: React.FC = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState({
     tournaments: 0,
     teams: 0,
     users: 0,
-    reservations: 0,
+    posts: 0,
   })
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isReady, setIsReady] = useState(false)
 
   const fetchStats = async () => {
     try {
       setLoading(true)
-      const [tournaments, teams, users, reservations] = await Promise.all([
+      const [tournaments, teams, users, posts] = await Promise.all([
         getAllTournaments(),
         getAllEquipes(),
         fetchAllUtilisateurs(),
-        getAllReservations(),
+        getAllPosts(),
       ])
 
       setStats({
         tournaments: tournaments.length,
         teams: teams.length,
         users: users.length,
-        reservations: reservations.length,
+        posts: posts.length,
       })
       setError(null)
     } catch (err) {
@@ -43,8 +46,15 @@ const AdminOverview: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchStats()
-  }, [])
+    if (user) {
+      fetchStats();
+      setIsReady(true); // Indique que l'utilisateur est prêt
+    }
+  }, [user]);
+
+  if (!isReady) {
+    return <div>Chargement...</div>; // Placeholder pendant que user n'est pas prêt
+  }
 
   const statCards = [
     {
@@ -99,8 +109,8 @@ const AdminOverview: React.FC = () => {
       textColor: "text-[#D9534F]",
     },
     {
-      title: "Réservations",
-      value: stats.reservations,
+      title: "Posts",
+      value: stats.posts,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -272,6 +282,22 @@ const AdminOverview: React.FC = () => {
                   ),
                   color: "from-[#f09d7c] to-[#e67e22]",
                   href: "/users/create",
+                },
+                                {
+                  title: "Nouveau Post",
+                  description: "Publier du contenu",
+                  icon: (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                  ),
+                  color: "from-[#f09d7c] to-[#e67e22]",
+                  href: "/post-management",
                 },
               ].map((action, index) => (
                 <a

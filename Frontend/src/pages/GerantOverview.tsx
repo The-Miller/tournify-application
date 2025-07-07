@@ -5,8 +5,10 @@
 import { useState, useEffect } from "react"
 import { getAllTournaments, getAllEquipes, getAllMatches } from "../api/api"
 import Sidebar from "../components/Sidebar"
+import { useAuth } from "../contexts/AuthContext"
 
 const GerantOverview = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState({
     tournaments: 0,
     teams: 0,
@@ -14,6 +16,7 @@ const GerantOverview = () => {
   })
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isReady, setIsReady] = useState(false)
 
   const fetchStats = async () => {
     try {
@@ -35,23 +38,32 @@ const GerantOverview = () => {
   }
 
   useEffect(() => {
-    fetchStats()
-  }, [])
+    if (user) {
+      fetchStats();
+      setIsReady(true); // Indique que l'utilisateur est prêt
+    }
+  }, [user]);
+
+  if (!isReady) {
+    return <div>Chargement...</div>; // Placeholder pendant que user n'est pas prêt
+  }
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-[#6BA7E2]/5 via-white to-[#1b3971]/5">
       <Sidebar />
       <main className="flex-1 ml-64 p-8">
-        {/* Header */}
+        {/* Header avec message de bienvenue utilisant user */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#6BA7E2] to-[#1b3971] bg-clip-text text-transparent mb-4">
             Vue d'ensemble
           </h1>
-          <p className="text-xl text-gray-600">Tableau de bord administrateur</p>
+          <p className="text-xl text-gray-600">
+            Bienvenue, {user?.name || "Gérant"} ! | Tableau de bord administrateur
+          </p>
         </div>
 
         {error ? (
-          <div className="bg-redcd -50 border border-red-200 rounded-2xl p-8 text-center">
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
             <svg className="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"

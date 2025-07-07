@@ -102,6 +102,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/utilisateurs/create-with-role", 
                                  "/api/utilisateurs/login", 
                                  "/api/utilisateurs/register", 
+                                 "/api/posts/**", 
                                  "/api-docs/**", 
                                  "/swagger-ui/**",
                                  "/v3/api-docs/**",

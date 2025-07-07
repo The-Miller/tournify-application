@@ -6,13 +6,16 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Sidebar from "../components/Sidebar"
 import { getAllPosts } from "../api/api"
+import { useAuth } from "../contexts/AuthContext"
 
 const CommunityManagerOverview: React.FC = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState({
     posts: 0,
   })
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isReady, setIsReady] = useState(false)
 
   const fetchStats = async () => {
     try {
@@ -31,8 +34,15 @@ const CommunityManagerOverview: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchStats()
-  }, [])
+    if (user) {
+      fetchStats();
+      setIsReady(true); // Indique que l'utilisateur est prêt
+    }
+  }, [user]);
+
+  if (!isReady) {
+    return <div>Chargement...</div>; // Placeholder pendant que user n'est pas prêt
+  }
 
   const statCards = [
     {

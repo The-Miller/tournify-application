@@ -235,6 +235,32 @@ export const getQRCodeForReservation = async (reservationId) => {
   return response.data;
 };
 
+// ==================== Classements ====================
+export const getRankings = async (sport, tournamentId) => {
+  const response = await api.get(`/api/classements/${sport}/${tournamentId}`);
+  return response.data;
+};
+
+export const getAllRankings = async () => {
+  const response = await api.get("/api/classements/all");
+  return response.data;
+};
+
+export const createTeamStats = async (equipeId, stats) => {
+  const response = await api.post(`/api/classements/${equipeId}/team-stats`, stats);
+  return response.data;
+};
+
+export const updateTeamStats = async (id, stats) => {
+  const response = await api.put(`/api/classements/team-stats/${id}`, stats);
+  return response.data;
+};
+
+export const deleteTeamStats = async (id) => {
+  await api.delete(`/api/classements/team-stats/${id}`);
+};
+
+
 // ==================== Posts ====================
 
 export const createPost = async (formData) => {
