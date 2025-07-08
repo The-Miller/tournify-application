@@ -51,26 +51,32 @@ import java.io.InputStream;
 @Configuration
 public class DialogflowConfig {
 
+    private static final String SECRET_PATH = "/etc/secrets/chatbot-tournify-sxev-9978e5cfb5ad.json";
+    private static final String CLASSPATH_RESOURCE = "credentials/chatbot-tournify-sxev-9978e5cfb5ad.json";
+
     @Bean
-    public GoogleCredentials googleCredentials() throws IOException {
-        // 1. Chemin utilisé sur Render (secret monté par volume)
-        File file = new File("/etc/secrets/chatbot-tournify-sxev-9978e5cfb5ad.json");
-        InputStream inputStream;
-        System.out.println("👀 Checking if file exists: " + file.getAbsolutePath());
-        System.out.println("✅ Exists? " + file.exists());
-        System.out.println("✅ Can read? " + file.canRead());
+    public GoogleCredentials googleCredentials() {
+        try {
+            InputStream inputStream;
+            File secretFile = new File(SECRET_PATH);
 
+            System.out.println("🔍 Checking credentials file at: " + secretFile.getAbsolutePath());
+            System.out.println("📄 Exists? " + secretFile.exists());
+            System.out.println("🔐 Can read? " + secretFile.canRead());
 
-        if (file.exists() && file.canRead()) {
-            inputStream = new FileInputStream(file);
-            System.out.println("✅ Credentials loaded from /etc/secrets");
-        } else {
-            // 2. Sinon, fallback sur les ressources locales pour le dev
-            inputStream = new ClassPathResource("credentials/chatbot-tournify-sxev-9978e5cfb5ad.json").getInputStream();
-            System.out.println("✅ Credentials loaded from classpath (local dev)");
+            if (secretFile.exists() && secretFile.canRead()) {
+                inputStream = new FileInputStream(secretFile);
+                System.out.println("✅ Loaded credentials from /etc/secrets");
+            } else {
+                inputStream = new ClassPathResource(CLASSPATH_RESOURCE).getInputStream();
+                System.out.println("✅ Loaded credentials from classpath (local development)");
+            }
+
+            return GoogleCredentials.fromStream(inputStream)
+                    .createScoped("https://www.googleapis.com/auth/cloud-platform");
+
+        } catch (IOException e) {
+            throw new IllegalStateException("❌ Failed to load Google credentials for Dialogflow", e);
         }
-
-        return GoogleCredentials.fromStream(inputStream)
-                .createScoped("https://www.googleapis.com/auth/cloud-platform");
     }
 }
