@@ -56,6 +56,10 @@ public class DialogflowConfig {
         // 1. Chemin utilisé sur Render (secret monté par volume)
         File file = new File("/etc/secrets/chatbot-tournify-sxev-9978e5cfb5ad.json");
         InputStream inputStream;
+        System.out.println("👀 Checking if file exists: " + file.getAbsolutePath());
+        System.out.println("✅ Exists? " + file.exists());
+        System.out.println("✅ Can read? " + file.canRead());
+
 
         if (file.exists() && file.canRead()) {
             inputStream = new FileInputStream(file);
