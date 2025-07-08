@@ -43,28 +43,30 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 public class DialogflowConfig {
 
     @Bean
     public GoogleCredentials googleCredentials() throws IOException {
-        String credentialsPath = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
+        // 1. Chemin utilisé sur Render (secret monté par volume)
+        File file = new File("/etc/secrets/chatbot-tournify-sxev-9978e5cfb5ad.json");
+        InputStream inputStream;
 
-        if (credentialsPath != null && !credentialsPath.isEmpty()) {
-            // Chargement via le chemin absolu défini dans la variable d'env
-            try (FileInputStream serviceAccountStream = new FileInputStream(credentialsPath)) {
-                return GoogleCredentials.fromStream(serviceAccountStream)
-                        .createScoped("https://www.googleapis.com/auth/cloud-platform");
-            }
+        if (file.exists() && file.canRead()) {
+            inputStream = new FileInputStream(file);
+            System.out.println("✅ Credentials loaded from /etc/secrets");
         } else {
-            // Chargement depuis le classpath (local dev)
-            try (var resourceStream = new ClassPathResource("credentials/chatbot-tournify-local.json").getInputStream()) {
-                return GoogleCredentials.fromStream(resourceStream)
-                        .createScoped("https://www.googleapis.com/auth/cloud-platform");
-            }
+            // 2. Sinon, fallback sur les ressources locales pour le dev
+            inputStream = new ClassPathResource("credentials/chatbot-tournify-sxev-9978e5cfb5ad.json").getInputStream();
+            System.out.println("✅ Credentials loaded from classpath (local dev)");
         }
+
+        return GoogleCredentials.fromStream(inputStream)
+                .createScoped("https://www.googleapis.com/auth/cloud-platform");
     }
 }
